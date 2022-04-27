@@ -1,6 +1,7 @@
 <template>
   <div class="card" :class="size">
-    <img src="@/assets/imgs/img-1.jpg" class="card-img" alt="" />
+    无法加载图片
+    <img :src="bg" class="card-img" alt="" />
     <div class="card-title">{{ title }}</div>
   </div>
 </template>
@@ -30,6 +31,10 @@ defineProps({
   height: 400px;
   margin-bottom: 40px;
   position: relative;
+  background: rgba(255,255,255,.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   &:hover {
     transform: scale(1.1);
   }

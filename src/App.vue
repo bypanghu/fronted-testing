@@ -8,9 +8,9 @@
     </div>
 
     <div class="flex">
-      <card  v-for="(item , index) in cardData.list" :img="item.img" :title="item.title" :key="index"></card>
+      <card  v-for="(item , index) in cardData.list" :bg="item.img" :title="item.title" :key="index"></card>
       <div class="flex-4">
-        <card  v-for="(item , index) in cardData.smallList"  size="small" :img="item.img" :title="item.title" :key="index"></card>
+        <card  v-for="(item , index) in cardData.smallList"  size="small" :bg="item.img" :title="item.title" :key="index"></card>
       </div>
     </div>
 
