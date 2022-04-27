@@ -3,6 +3,17 @@
   <div class="container">
     <Header></Header>
 
+    <div class="container-line">
+      <div class="container-line-box">CHARACTERS</div>
+    </div>
+
+    <div class="flex">
+      <card  v-for="(item , index) in cardData.list" :img="item.img" :title="item.title" :key="index"></card>
+      <div class="flex-4">
+        <card  v-for="(item , index) in cardData.smallList"  size="small" :img="item.img" :title="item.title" :key="index"></card>
+      </div>
+    </div>
+
     <Teleport to="body">
       <!--全局弹窗 提示用户手机切换为横屏状态-->
       <div class="modal" v-if="showRouteModal">
@@ -20,6 +31,8 @@
 import { onUnmounted, ref } from "vue";
 import { isLandscape, isMobile } from "@/utils/index.js";
 import Header from "@/components/header.vue";
+import Card from "@/components/card.vue";
+import { ajax } from '@/utils/ajax'
 
 const tabList = ["HOME", "NEWS", "WEAPONS", "MAP", "CHARACTERS", "WALLPAPER"];
 const activeTab = ref(4);
@@ -29,6 +42,20 @@ const isMobileKey = isMobile();
 const changeTab = (e) => {
   activeTab.value = e;
 };
+
+const cardData = ref({
+  list : [],
+  smallList: []
+})
+
+
+ajax('/mock/list').then(res=>{
+  console.log(JSON.parse(res))
+  const response = JSON.parse(res)
+  if(response.code === 200){
+    cardData.value = response.data
+  }
+})
 
 const init = () => {
   // 判断用户是否横屏
@@ -73,72 +100,47 @@ $--active: #e8a137;
   align-items: center;
   justify-content: flex-start;
   height: 100vh;
-  &-header {
-    background-image: url(@/assets/imgs/bg.png);
-    background-size: cover;
+  &-line {
     width: 100vw;
-    height: 260px;
-    padding: 25px 50px;
-
-    &-logo {
-      margin-top: 60px;
-      margin-left: 240px;
-      width: 270px;
-    }
-
-    &-tabs {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      color: #fff;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding-left: 20px;
-      border-left: 15px solid $--active;
-      border-right: 15px solid $--active;
-      &-f {
-        position: relative;
-        width: 15px;
-        height: 30px;
-        margin-left: auto;
-        background-color: $--active;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        font-size: 20px;
-        margin-right: 40px;
-        &::before {
-          content: "";
-          display: block;
-          position: absolute;
-          width: 0;
-          height: 0;
-          right: 15px;
-          border-width: 15px 9.5px;
-          border-style: solid;
-          border-color: transparent $--active transparent transparent;
-        }
-        &::after {
-          content: "";
-          display: block;
-          position: absolute;
-          width: 0;
-          height: 0;
-          left: 15px;
-          border-width: 15px 9.5px;
-          border-style: solid;
-          border-color: transparent transparent transparent $--active;
-          top: 0;
-        }
+    height: 2px;
+    background-color: #fff;
+    margin-top: 60px;
+    position: relative;
+    &-box {
+      position: absolute;
+      left: 50%;
+      top: -25px;
+      width: 120px;
+      height: 50px;
+      font-weight: 500;
+      background-color: #2a3137;
+      transform: translate(-50%);
+      border: 1px solid #2a3137;
+      color: #a3acb1;
+      text-align: center;
+      line-height: 48px;
+      &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 0;
+        height: 0;
+        left: 119px;
+        border-width: 25px 18px;
+        border-style: solid;
+        border-color: transparent transparent transparent #2a3137;
       }
-      &-tab {
-        padding: 15px 30px;
-        font-weight: 600;
-        cursor: pointer;
-        &.active {
-          color: $--active;
-        }
+      &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 0;
+        height: 0;
+        left: -36px;
+        border-width: 25px 18px;
+        border-style: solid;
+        border-color: transparent #2a3137 transparent transparent;
+        top: 0;
       }
     }
   }
@@ -168,6 +170,39 @@ $--active: #e8a137;
     font-size: 20px;
     font-weight: 500;
     color: #fff;
+  }
+}
+
+.flex {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 50px 200px;
+  width: 100vw;
+}
+
+.flex-4 {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 400px;
+}
+
+@media (max-width: 1200px) {
+  .flex {
+    padding: 50px 20px;
+    justify-content: space-around;
+  }
+  .flex-4 {
+    width: 40vw;
+  }
+}
+
+@media (max-width: 725px) {
+  .flex-4 {
+    width: 80vw;
   }
 }
 </style>

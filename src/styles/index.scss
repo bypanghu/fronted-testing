@@ -1,5 +1,27 @@
 @import url(init.scss);
 
+html {
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+body {
+    background-color: #202529;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+@media screen and (max-width: 990px) {
+    body {
+        background-color: none;
+        background-image: url(@/assets/imgs/ipad-bg.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
+
+
 .rotate-center {
     -webkit-animation: rotate-center 1s ease-in-out infinite both;
     animation: rotate-center 1s ease-in-out infinite both;

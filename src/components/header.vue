@@ -1,7 +1,7 @@
 <template>
-  <div class="container-header">
-    <div class="container-header-tabs">
-      <div
+  <div class="container-header is-pc" v-if="is_pc">
+    <ul class="container-header-tabs">
+      <li
         class="container-header-tabs-tab"
         :class="index === activeTab ? 'active' : ''"
         v-for="(item, index) in tabList"
@@ -9,9 +9,31 @@
         @click="changeTab(index)"
       >
         {{ item }}
-      </div>
+      </li>
       <div class="container-header-tabs-f">f</div>
-    </div>
+    </ul>
+    <img src="@/assets/imgs/logo.png" class="container-header-logo" alt="" />
+  </div>
+
+  <div class="container-header is-moble" v-if="!is_pc">
+    <a class="container-header-tabs-tigger" @click="changeShowTabs"></a>
+    <ul
+      class="container-header-tabs"
+      id="tigger-body"
+      :class="showTabs ? 'show' : 'hidden'"
+    >
+      <a class="container-header-tabs-tigger-close" @click="changeShowTabs"></a>
+      <li
+        class="container-header-tabs-tab"
+        :class="index === activeTab ? 'active' : ''"
+        v-for="(item, index) in tabList"
+        :key="index"
+        @click="changeTab(index)"
+      >
+        {{ item }}
+      </li>
+      <div class="container-header-tabs-f">f</div>
+    </ul>
     <img src="@/assets/imgs/logo.png" class="container-header-logo" alt="" />
   </div>
 </template>
@@ -20,8 +42,31 @@
 import { onUnmounted, ref } from "vue";
 const tabList = ["HOME", "NEWS", "WEAPONS", "MAP", "CHARACTERS", "WALLPAPER"];
 const activeTab = ref(4);
+const showTabs = ref(false);
 const changeTab = (e) => {
   activeTab.value = e;
+};
+const changeShowTabs = () => {
+  showTabs.value = !showTabs.value;
+};
+
+const is_pc = ref(true);
+const window_width = window.document.body.clientWidth;
+if (window_width < 990) {
+  is_pc.value = false;
+} else {
+  is_pc.value = true;
+}
+
+window.onresize = (e) => {
+  window.requestAnimationFrame(() => {
+    const window_width = window.document.body.clientWidth;
+    if (window_width < 990) {
+      is_pc.value = false;
+    } else {
+      is_pc.value = true;
+    }
+  });
 };
 </script>
 
@@ -102,6 +147,93 @@ $--active: #e8a137;
         }
       }
     }
+  }
+}
+
+.is-moble.container-header {
+  background-image: none;
+  background-color: #121413;
+  height: 60px;
+  border-left: 15px solid $--active;
+  padding: 10px;
+  width: calc(100vw - 10px);
+  .container-header-logo {
+    height: 40px;
+    width: 160px;
+    margin: 0;
+  }
+  .container-header-tabs {
+    // display: none;
+    width: 280px;
+    background: #fff;
+    flex-direction: column;
+    color: #000;
+    border: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 0;
+    transition: transform 0.25s ease-out, opacity 0.25s ease-out,
+      display 0.1s ease-in-out;
+    height: 100vh;
+    padding-top: 40px;
+
+    .container-header-tabs-f {
+      display: none;
+    }
+  }
+  .container-header-tabs.hidden {
+    transform: translateX(280px);
+    opacity: 0;
+    display: none;
+  }
+  .container-header-tabs.show {
+    transform: translateX(0);
+    opacity: 1;
+    display: block;
+    z-index: 888;
+  }
+
+  .container-header-tabs-tigger {
+    float: right;
+    width: 40px;
+    height: 40px;
+    background-color: $--active;
+    border-radius: 4px;
+    background-image: url(@/assets/imgs/icon_menu.png);
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .container-header-tabs-tigger-close {
+    width: 40px;
+    height: 40px;
+    // background-color: $--active;
+    border-radius: 4px;
+    background-image: url(@/assets/imgs/icon_menu_close.png);
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+}
+//
+@media (min-width: 990px) {
+  .is-pc {
+    display: block;
+  }
+  .is-moble {
+    display: none;
+  }
+}
+@media (max-width: 990px) {
+  .is-pc {
+    display: none;
+  }
+  .is-moble {
+    display: block;
   }
 }
 </style>
